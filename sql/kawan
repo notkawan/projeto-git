@@ -1,0 +1,433 @@
+-- MySQL Administrator dump 1.4
+--
+-- ------------------------------------------------------
+-- Server version	5.5.5-10.4.24-MariaDB
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+
+
+--
+-- Create schema dbpizzaria
+--
+
+CREATE DATABASE IF NOT EXISTS dbpizzaria;
+USE dbpizzaria;
+
+--
+-- Definition of table `avaliacao`
+--
+
+DROP TABLE IF EXISTS `avaliacao`;
+CREATE TABLE `avaliacao` (
+  `idavaliacao` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `idcliente` int(10) unsigned NOT NULL DEFAULT 0,
+  `avaliacao` longtext DEFAULT NULL,
+  `estrelas` varchar(5) DEFAULT NULL,
+  `cadastro` datetime DEFAULT NULL,
+  `alteracao` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `ativo` char(1) DEFAULT NULL,
+  PRIMARY KEY (`idavaliacao`,`idcliente`),
+  KEY `FK_idcliente_1` (`idcliente`),
+  CONSTRAINT `FK_idcliente_1` FOREIGN KEY (`idcliente`) REFERENCES `cliente` (`idcliente`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `avaliacao`
+--
+
+/*!40000 ALTER TABLE `avaliacao` DISABLE KEYS */;
+INSERT INTO `avaliacao` (`idavaliacao`,`idcliente`,`avaliacao`,`estrelas`,`cadastro`,`alteracao`,`ativo`) VALUES 
+ (1,1,'Muito bom a pizza, sabor que lembra a infancia','5',NULL,'2023-06-27 19:49:19','A'),
+ (2,2,'AAAAAAAAAAAAAAAAAAAAA','4',NULL,'2023-06-27 19:55:20','A'),
+ (3,3,'Lembro que meus alunos me mostraram esse site e hj em dia fazem milhoes com essas pizzas','5',NULL,'2023-06-27 20:07:27','A'),
+ (4,4,'Vou voltar pro passado e comer uma pizza com meu sogro',NULL,NULL,'2023-06-27 20:07:27','A');
+/*!40000 ALTER TABLE `avaliacao` ENABLE KEYS */;
+
+
+--
+-- Definition of table `banner`
+--
+
+DROP TABLE IF EXISTS `banner`;
+CREATE TABLE `banner` (
+  `idbanner` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `imgbanner` varchar(145) NOT NULL DEFAULT '',
+  `titulo` varchar(120) NOT NULL DEFAULT '',
+  `descricao` longtext NOT NULL DEFAULT '\'',
+  `video` longtext NOT NULL DEFAULT '',
+  `cadastro` datetime NOT NULL,
+  `alteracao` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `ativo` char(1) NOT NULL DEFAULT 'A' COMMENT 'A de ativado e D de desativado',
+  PRIMARY KEY (`idbanner`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `banner`
+--
+
+/*!40000 ALTER TABLE `banner` DISABLE KEYS */;
+INSERT INTO `banner` (`idbanner`,`imgbanner`,`titulo`,`descricao`,`video`,`cadastro`,`alteracao`,`ativo`) VALUES 
+ (1,'assets/img/download.jpg','flow espacial','Oh pra mim, woki to na moda, tudo te levo para dar um giro sobre as quatro as rodas, vrum vrum, bebi gin, isso te incomoda, o dinheiro me da possibilidades, eu tenho a chave que voce ja quis, honro a trinta fumo so temaki, meu refrao é tipo daleshakeys, eu que sou o hype.','https://www.youtube.com/watch?v=VBJvDgBZEi4','0000-00-00 00:00:00','2023-06-02 19:45:28','D'),
+ (2,'assets/img/hero.png','Linha Zapz 20% de desconto.','Coma saldavelmente nossos alimentos deliciosos e saudaveis super bem saudaveis feito com amor e carinho deliciosos coma pfv','https://www.youtube.com/watch?v=VBJvDgBZEi4','0000-00-00 00:00:00','2023-06-28 22:01:10','A');
+/*!40000 ALTER TABLE `banner` ENABLE KEYS */;
+
+
+--
+-- Definition of table `cardapio`
+--
+
+DROP TABLE IF EXISTS `cardapio`;
+CREATE TABLE `cardapio` (
+  `idcardapio` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `img` varchar(150) DEFAULT NULL,
+  `nome` varchar(64) DEFAULT NULL,
+  `descricao` longtext DEFAULT NULL,
+  `preco` decimal(10,2) DEFAULT NULL,
+  `cadastro` datetime DEFAULT NULL,
+  `alteracao` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `ativo` char(1) NOT NULL DEFAULT 'A',
+  `idmenu` int(10) unsigned NOT NULL DEFAULT 0,
+  PRIMARY KEY (`idcardapio`,`idmenu`),
+  KEY `FK_menu_1` (`idmenu`),
+  CONSTRAINT `FK_menu_1` FOREIGN KEY (`idmenu`) REFERENCES `menu` (`idmenu`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `cardapio`
+--
+
+/*!40000 ALTER TABLE `cardapio` DISABLE KEYS */;
+INSERT INTO `cardapio` (`idcardapio`,`img`,`nome`,`descricao`,`preco`,`cadastro`,`alteracao`,`ativo`,`idmenu`) VALUES 
+ (1,'assets/img/comida.jpg','pizza cozida','pizza cozida','10.00',NULL,'2023-06-26 20:06:40','A',1),
+ (2,'assets/img/c1.png','aaa','aaa','20.00',NULL,'2023-06-26 20:15:26','A',1),
+ (3,'assets/img/c1.png','aaa','aaa','20.00',NULL,'2023-06-26 20:15:26','A',2);
+/*!40000 ALTER TABLE `cardapio` ENABLE KEYS */;
+
+
+--
+-- Definition of table `cards`
+--
+
+DROP TABLE IF EXISTS `cards`;
+CREATE TABLE `cards` (
+  `idcards` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `titulo` varchar(140) DEFAULT NULL,
+  `descricao` longtext DEFAULT NULL,
+  `img` varchar(140) DEFAULT NULL,
+  `cadastro` datetime DEFAULT NULL,
+  `alteracao` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `ativo` char(1) DEFAULT NULL,
+  PRIMARY KEY (`idcards`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `cards`
+--
+
+/*!40000 ALTER TABLE `cards` DISABLE KEYS */;
+INSERT INTO `cards` (`idcards`,`titulo`,`descricao`,`img`,`cadastro`,`alteracao`,`ativo`) VALUES 
+ (2,'Somos pau para toda hora','Temos um desepenho rapido e eficiente para fazer seu alimento chegar até você!','bi bi-card-checklist',NULL,'2023-06-05 21:54:20','A'),
+ (3,'Preço assecivel','Temos o melhor preço da regiao com alimento de qualidade e por um preço tão barato que parece que é mentira, mas não é.','bi bi-currency-dollar',NULL,'2023-06-05 21:52:42','A'),
+ (4,'Comida muito gostosa','Melhor pizza de todas muito degustavel e delioso, com o tempero mais trabalhado da regiao de qualidade otima e bem feito.','bi bi-emoji-heart-eyes-fill',NULL,'2023-06-05 21:54:21','A');
+/*!40000 ALTER TABLE `cards` ENABLE KEYS */;
+
+
+--
+-- Definition of table `cliente`
+--
+
+DROP TABLE IF EXISTS `cliente`;
+CREATE TABLE `cliente` (
+  `idcliente` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `nascimento` date DEFAULT NULL,
+  `senha` varchar(30) DEFAULT NULL,
+  `nome` varchar(45) DEFAULT NULL,
+  `sobrenome` varchar(64) DEFAULT NULL,
+  `cep` char(9) DEFAULT NULL,
+  `cadastro` datetime DEFAULT NULL,
+  `alteracao` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `ativo` char(1) NOT NULL DEFAULT 'A',
+  `foto` varchar(250) NOT NULL DEFAULT '',
+  PRIMARY KEY (`idcliente`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `cliente`
+--
+
+/*!40000 ALTER TABLE `cliente` DISABLE KEYS */;
+INSERT INTO `cliente` (`idcliente`,`nascimento`,`senha`,`nome`,`sobrenome`,`cep`,`cadastro`,`alteracao`,`ativo`,`foto`) VALUES 
+ (1,'0000-00-00','12345678','Miguel','Grinet','12345-123',NULL,'2023-06-27 20:01:39','A','assets/img/miguel.png'),
+ (2,'0000-00-00','12345678','Gabriel','Alberto','12345-123',NULL,'2023-06-26 21:49:18','A',''),
+ (3,'0000-00-00','12345678','Luciano','Petersen','12345-456',NULL,'2023-06-27 20:01:39','A','assets/img/luciano.jpg'),
+ (4,'2023-10-10','12345678','Matue','085','12345-123',NULL,'2023-06-27 20:01:39','A','assets/img/matue.jpg');
+/*!40000 ALTER TABLE `cliente` ENABLE KEYS */;
+
+
+--
+-- Definition of table `contatoenviar`
+--
+
+DROP TABLE IF EXISTS `contatoenviar`;
+CREATE TABLE `contatoenviar` (
+  `idcontatoenviar` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `nome` varchar(45) DEFAULT NULL,
+  `email` varchar(64) DEFAULT NULL,
+  `subject` varchar(50) DEFAULT NULL,
+  `messagem` longtext DEFAULT NULL,
+  `cadastro` datetime DEFAULT NULL,
+  `alteracao` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `ativo` char(1) NOT NULL DEFAULT 'A',
+  PRIMARY KEY (`idcontatoenviar`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `contatoenviar`
+--
+
+/*!40000 ALTER TABLE `contatoenviar` DISABLE KEYS */;
+/*!40000 ALTER TABLE `contatoenviar` ENABLE KEYS */;
+
+
+--
+-- Definition of table `contatos`
+--
+
+DROP TABLE IF EXISTS `contatos`;
+CREATE TABLE `contatos` (
+  `idcontatos` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `titulo` varchar(200) DEFAULT NULL,
+  `info` varchar(200) DEFAULT NULL,
+  `cadastro` datetime DEFAULT NULL,
+  `alteracao` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `ativo` char(1) NOT NULL DEFAULT 'A',
+  `icon` longtext NOT NULL DEFAULT '',
+  PRIMARY KEY (`idcontatos`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `contatos`
+--
+
+/*!40000 ALTER TABLE `contatos` DISABLE KEYS */;
+INSERT INTO `contatos` (`idcontatos`,`titulo`,`info`,`cadastro`,`alteracao`,`ativo`,`icon`) VALUES 
+ (1,'Endereço','Rua fraternidade, Vila Rica, 115',NULL,'2023-06-28 21:05:44','A','bi bi-house'),
+ (2,'Email','miguelgrinet@gmail.com',NULL,'2023-06-28 21:09:52','A','bi bi-envelope'),
+ (3,'Número','+5533991124694',NULL,'2023-06-28 21:09:52','A','bi bi-telephone'),
+ (4,'Horarios','Segunda a sabado das 00:00 as 00:00',NULL,'2023-06-28 21:09:52','A','bi bi-stopwatch'),
+ (5,'Instagram','@shazzy.store',NULL,'2023-06-28 21:10:29','A','bi bi-instagram');
+/*!40000 ALTER TABLE `contatos` ENABLE KEYS */;
+
+
+--
+-- Definition of table `estatisticas`
+--
+
+DROP TABLE IF EXISTS `estatisticas`;
+CREATE TABLE `estatisticas` (
+  `idestatisticas` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `img` varchar(150) DEFAULT NULL,
+  PRIMARY KEY (`idestatisticas`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `estatisticas`
+--
+
+/*!40000 ALTER TABLE `estatisticas` DISABLE KEYS */;
+INSERT INTO `estatisticas` (`idestatisticas`,`img`) VALUES 
+ (1,'.assets/img/download.jpg');
+/*!40000 ALTER TABLE `estatisticas` ENABLE KEYS */;
+
+
+--
+-- Definition of table `eventos`
+--
+
+DROP TABLE IF EXISTS `eventos`;
+CREATE TABLE `eventos` (
+  `ideventos` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `img` varchar(160) DEFAULT NULL,
+  `nome` varchar(64) DEFAULT NULL,
+  `preco` decimal(10,2) DEFAULT NULL,
+  `descricao` longtext DEFAULT NULL,
+  `cadastro` datetime DEFAULT NULL,
+  `alteracao` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `ativo` char(1) NOT NULL DEFAULT 'A',
+  PRIMARY KEY (`ideventos`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `eventos`
+--
+
+/*!40000 ALTER TABLE `eventos` DISABLE KEYS */;
+INSERT INTO `eventos` (`ideventos`,`img`,`nome`,`preco`,`descricao`,`cadastro`,`alteracao`,`ativo`) VALUES 
+ (1,'assets/img/events-1.jpg','Festas customizadas','100.00','Festas customizadas o quanto voce quiser mas será fechada somente a sua mesa.',NULL,'2023-06-27 21:07:56','A'),
+ (2,'assets/img/events-2.jpg','Festa privada','200.00','Faça uma festa numa sala privada onde voce pode ter privacidade',NULL,'2023-06-27 21:07:56','A'),
+ (3,'assets/img/events-3.jpg','Restaurante inteiro','1000.00','Tenha o restaurante inteiro so para você por uma noite!',NULL,'2023-06-27 21:07:57','A');
+/*!40000 ALTER TABLE `eventos` ENABLE KEYS */;
+
+
+--
+-- Definition of table `galeria`
+--
+
+DROP TABLE IF EXISTS `galeria`;
+CREATE TABLE `galeria` (
+  `idgaleria` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `img` varchar(164) DEFAULT NULL,
+  `cadastro` datetime DEFAULT NULL,
+  `alteracao` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `ativo` char(1) NOT NULL DEFAULT 'A',
+  PRIMARY KEY (`idgaleria`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `galeria`
+--
+
+/*!40000 ALTER TABLE `galeria` DISABLE KEYS */;
+INSERT INTO `galeria` (`idgaleria`,`img`,`cadastro`,`alteracao`,`ativo`) VALUES 
+ (1,'assets/img/gallery/gallery-1.jpg',NULL,'2023-06-28 19:59:14','A'),
+ (2,'assets/img/gallery/gallery-2.jpg',NULL,'2023-06-28 19:59:14','A'),
+ (3,'assets/img/gallery/gallery-3.jpg',NULL,'2023-06-28 19:59:14','A'),
+ (4,'assets/img/gallery/gallery-4.jpg',NULL,'2023-06-28 19:59:14','A'),
+ (5,'assets/img/gallery/gallery-5.jpg',NULL,'2023-06-28 19:59:14','A'),
+ (6,'assets/img/gallery/gallery-6.jpg',NULL,'2023-06-28 19:59:14','A'),
+ (7,'assets/img/gallery/gallery-7.jpg',NULL,'2023-06-28 19:59:14','A'),
+ (8,'assets/img/gallery/gallery-8.jpg',NULL,'2023-06-28 19:59:14','A');
+/*!40000 ALTER TABLE `galeria` ENABLE KEYS */;
+
+
+--
+-- Definition of table `menu`
+--
+
+DROP TABLE IF EXISTS `menu`;
+CREATE TABLE `menu` (
+  `idmenu` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `tipo` varchar(64) DEFAULT NULL,
+  `cadastro` datetime DEFAULT NULL,
+  `alteracao` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `ativo` char(1) DEFAULT NULL,
+  PRIMARY KEY (`idmenu`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `menu`
+--
+
+/*!40000 ALTER TABLE `menu` DISABLE KEYS */;
+INSERT INTO `menu` (`idmenu`,`tipo`,`cadastro`,`alteracao`,`ativo`) VALUES 
+ (1,'entrada','0000-00-00 00:00:00','2023-06-05 20:56:50','A'),
+ (2,'cafe',NULL,'2023-06-05 20:56:50','A'),
+ (3,'almoço',NULL,'2023-06-05 20:56:50','A'),
+ (4,'jantar',NULL,'2023-06-05 20:56:51','A');
+/*!40000 ALTER TABLE `menu` ENABLE KEYS */;
+
+
+--
+-- Definition of table `profissionais`
+--
+
+DROP TABLE IF EXISTS `profissionais`;
+CREATE TABLE `profissionais` (
+  `idprofissionais` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `img` varchar(155) DEFAULT NULL,
+  `nome` varchar(64) DEFAULT NULL,
+  `funcao` varchar(64) DEFAULT NULL,
+  `descricao` longtext DEFAULT NULL,
+  `cadastro` datetime DEFAULT NULL,
+  `alteracao` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `ativo` char(1) NOT NULL DEFAULT 'A',
+  PRIMARY KEY (`idprofissionais`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `profissionais`
+--
+
+/*!40000 ALTER TABLE `profissionais` DISABLE KEYS */;
+INSERT INTO `profissionais` (`idprofissionais`,`img`,`nome`,`funcao`,`descricao`,`cadastro`,`alteracao`,`ativo`) VALUES 
+ (1,'assets/img/chefs/chefs-1.jpg','Marivaldo','Chefe de cozinha','\"Trabalho tanto tempo aqui que até esqueci de pedir meu primeiro salario.\"',NULL,'2023-06-27 21:28:55','A'),
+ (2,'assets/img/chefs/chefs-2.jpg','Jessica','Cozinheira','\"Odeio essa empresa!\"',NULL,'2023-06-27 21:28:55','A'),
+ (3,'assets/img/chefs/chefs-3.jpg','Lucas','Primo do chefe que pensa que é cozinheiro','\"Esses caras ficam me chamando de louco, mas eles tão me forçando a ficar preso nesse restaurante me ajuda pfv.\"',NULL,'2023-06-27 21:28:55','A');
+/*!40000 ALTER TABLE `profissionais` ENABLE KEYS */;
+
+
+--
+-- Definition of table `reservar`
+--
+
+DROP TABLE IF EXISTS `reservar`;
+CREATE TABLE `reservar` (
+  `idreservar` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `nome` varchar(64) DEFAULT NULL,
+  `email` varchar(64) DEFAULT NULL,
+  `telefone` varchar(20) DEFAULT NULL,
+  `data` date DEFAULT NULL,
+  `time` time DEFAULT NULL,
+  `numpessoas` varchar(10) DEFAULT NULL,
+  `message` longtext DEFAULT NULL,
+  `cadastro` datetime DEFAULT NULL,
+  `alteracao` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `ativo` char(1) NOT NULL DEFAULT 'A',
+  PRIMARY KEY (`idreservar`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `reservar`
+--
+
+/*!40000 ALTER TABLE `reservar` DISABLE KEYS */;
+INSERT INTO `reservar` (`idreservar`,`nome`,`email`,`telefone`,`data`,`time`,`numpessoas`,`message`,`cadastro`,`alteracao`,`ativo`) VALUES 
+ (1,'','','','0000-00-00','00:00:00','','',NULL,'2023-06-28 19:31:32','');
+/*!40000 ALTER TABLE `reservar` ENABLE KEYS */;
+
+
+--
+-- Definition of table `sobrenos`
+--
+
+DROP TABLE IF EXISTS `sobrenos`;
+CREATE TABLE `sobrenos` (
+  `idsobrenos` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `titulo` varchar(64) DEFAULT NULL,
+  `imagem` varchar(145) DEFAULT NULL,
+  `contato` varchar(20) DEFAULT NULL,
+  `descricao` longtext DEFAULT NULL,
+  `video` longtext DEFAULT NULL,
+  `cadastro` datetime DEFAULT NULL,
+  `alteracao` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `ativo` char(1) NOT NULL DEFAULT 'A',
+  PRIMARY KEY (`idsobrenos`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `sobrenos`
+--
+
+/*!40000 ALTER TABLE `sobrenos` DISABLE KEYS */;
+INSERT INTO `sobrenos` (`idsobrenos`,`titulo`,`imagem`,`contato`,`descricao`,`video`,`cadastro`,`alteracao`,`ativo`) VALUES 
+ (1,'pizzaria top','download.jpg','(33) 99112-4694','Nossa pizzaria tem como objeito melhorar a relação com as pessoas oferecendo aliementos saudaveis e inovadores, uma culinaria diferente de todos os restaurantes que voce provavelmente ja vistiou, temos um cardapio bem extenso com diversas opções sempre mais criativa e inovadora que a outra, procuramos melhorar em tudo, venha para nosso restaurante e experimente a melhor da culinaria possivel, seja como nos.','https://www.youtube.com/watch?v=CxmANW11Bmg&pp=ygUbY3J1emVpcm8gYW1hc3NhbmRvIGF0bGV0aWNv',NULL,'2023-06-02 21:07:01','A');
+/*!40000 ALTER TABLE `sobrenos` ENABLE KEYS */;
+
+
+
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
